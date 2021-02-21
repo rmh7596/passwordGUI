@@ -1,5 +1,5 @@
 # Plain text UI for password manager
-#from __future__ import print_function
+# To run: python3 ptui.py
 import random
 import string
 import sqlite3
