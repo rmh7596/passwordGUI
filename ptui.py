@@ -1,4 +1,5 @@
 # Plain text UI for password manager
+from __future__ import print_function
 import random
 import string
 import sqlite3
@@ -73,12 +74,20 @@ def retrieve():
         print("Username: " + value[1])
         print("Password: " + value[2])
         connection.close()
+        menu()
 
 
     if (q == '2'):
-        pass
-        # Display all names
-        # Which one would you like to retrieve
+        connection = sqlite3.connect("data.db")
+        c = connection.cursor()
+        c.execute('SELECT website FROM entry')
+        result = c.fetchall()
+        print("Saved Websites:")
+        for i in result:
+            print(i[0], end =" ")
+        print("\n")
+        menu()
+
     if (q == '3'):
         print("Have a good day!")
         quit()
@@ -103,7 +112,11 @@ def menu():
     if (user == '1'):
         generator()
     if (user == '2'):
-        store()
+        web = raw_input("Enter Website:")
+        u = raw_input("Enter Username:")
+        p = raw_input("Enter Password:")
+        print("Your password was stored")
+        store(web, u, p)
     if (user == '3'):
         retrieve()
     if (user == '4'):
@@ -130,7 +143,11 @@ def main():
     if (user == '1'):
         generator()
     if (user == '2'):
-        store()
+        web = raw_input("Enter Website:")
+        u = raw_input("Enter Username:")
+        p = raw_input("Enter Password:")
+        print("Your password was stored")
+        store(web, u, p)
     if (user == '3'):
         retrieve()
     if (user == '4'):
