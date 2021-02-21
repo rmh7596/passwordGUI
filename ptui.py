@@ -1,6 +1,8 @@
 # Plain text UI for password manager
 import random
 import string
+import sqlite3
+from entry import Entry # Class file
 
 
 def generator():
@@ -25,16 +27,61 @@ def generator():
     
     if (n == 'Y'):
         user = raw_input("Please enter a username to be associated with the password:")
-        store(user, final)
+        site = raw_input("Please enter the website that is associated with the entry:")
+        store(site,user, final)
         
     if (n == 'N'):
         menu()
 
-def store(usr, pswd):
-    print(usr + " " + pswd)
+def store(website, usr, pswd):
+    e = Entry(website, usr, pswd)
+    name = e.getUser()
+    pas = e.getPass()
+    web = e.getWeb()
+
+    #Database
+    connection = sqlite3.connect("data.db")
+    c = connection.cursor()
+    #c.execute('''CREATE TABLE entry (website text, username text, password text)''')
+    c.execute("INSERT INTO entry VALUES (?,?,?)", (web, name, pas))
+    connection.commit()
+    connection.close()
+    menu()
+
 
 def retrieve():
-    None
+    print("Select Option:")
+    print("1. Enter specific website for retrieval")
+    print("2. Browse all saved passwords")
+    print("3. Quit")
+    q = raw_input()
+    
+    while (True):
+        if (q == '1' or q == '2' or q == '3'):
+            break
+        
+        else:
+            print("Error: Incorrect input. Please try again")
+            q = raw_input()
+
+    if (q == '1'):
+        w = raw_input("Please enter the website name:")
+        connection = sqlite3.connect("data.db")
+        c = connection.cursor()
+        c.execute('SELECT * FROM entry WHERE website=?', (w,))
+        value = c.fetchone()
+        print("Username: " + value[1])
+        print("Password: " + value[2])
+        connection.close()
+
+
+    if (q == '2'):
+        pass
+        # Display all names
+        # Which one would you like to retrieve
+    if (q == '3'):
+        print("Have a good day!")
+        quit()
 
 def menu():
     print("What would you like to do?")
