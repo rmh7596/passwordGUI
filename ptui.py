@@ -1,5 +1,5 @@
 # Plain text UI for password manager
-from __future__ import print_function
+#from __future__ import print_function
 import random
 import string
 import sqlite3
@@ -10,7 +10,7 @@ def generator():
     builder = []
     password = ""
     print("Please enter a password length:")
-    length = input()
+    length = int(input())
     for i in range(length):
         char = random.choice(string.printable)
         if (char == " " or char == "\n" or char == "\t"):
@@ -22,13 +22,13 @@ def generator():
     print("Your generated password is: " + final)
     print("Would you like to save that password?: Y/N")
     
-    n = raw_input()
+    n = input()
     while(n != 'Y' and n != 'N'):
         print("Error: Wrong input")
     
     if (n == 'Y'):
-        user = raw_input("Please enter a username to be associated with the password:")
-        site = raw_input("Please enter the website that is associated with the entry:")
+        user = input("Please enter a username to be associated with the password:")
+        site = input("Please enter the website that is associated with the entry:")
         store(site,user, final)
         
     if (n == 'N'):
@@ -55,7 +55,7 @@ def retrieve():
     print("1. Enter specific website for retrieval")
     print("2. Browse all saved passwords")
     print("3. Quit")
-    q = raw_input()
+    q = input()
     
     while (True):
         if (q == '1' or q == '2' or q == '3'):
@@ -63,10 +63,10 @@ def retrieve():
         
         else:
             print("Error: Incorrect input. Please try again")
-            q = raw_input()
+            q = input()
 
     if (q == '1'):
-        w = raw_input("Please enter the website name:")
+        w = input("Please enter the website name:")
         connection = sqlite3.connect("data.db")
         c = connection.cursor()
         c.execute('SELECT * FROM entry WHERE website=?', (w,))
@@ -99,7 +99,7 @@ def menu():
     print ("3. Retrieve a password")
     print("4. Quit")
 
-    user =  raw_input();
+    user =  input();
 
     while (True):
         if (user == '1' or user == '2' or user == '3' or user == '4'):
@@ -107,14 +107,14 @@ def menu():
         
         else:
             print("Error: Incorrect input. Please try again")
-            user = raw_input()
+            user = input()
 
     if (user == '1'):
         generator()
     if (user == '2'):
-        web = raw_input("Enter Website:")
-        u = raw_input("Enter Username:")
-        p = raw_input("Enter Password:")
+        web = input("Enter Website:")
+        u = input("Enter Username:")
+        p = input("Enter Password:")
         print("Your password was stored")
         store(web, u, p)
     if (user == '3'):
@@ -130,7 +130,7 @@ def main():
     print ("3. Retrieve a password")
     print("4. Quit")
 
-    user =  raw_input();
+    user =  input();
 
     while (True):
         if (user == '1' or user == '2' or user == '3' or user == '4'):
@@ -138,14 +138,14 @@ def main():
         
         else:
             print("Error: Incorrect input. Please try again")
-            user = raw_input()
+            user = input()
 
     if (user == '1'):
         generator()
     if (user == '2'):
-        web = raw_input("Enter Website:")
-        u = raw_input("Enter Username:")
-        p = raw_input("Enter Password:")
+        web = input("Enter Website:")
+        u = input("Enter Username:")
+        p = input("Enter Password:")
         print("Your password was stored")
         store(web, u, p)
     if (user == '3'):
