@@ -1,63 +1,67 @@
-import tkinter as tk
+from tkinter import *
+import auth
+import ptui
 
-class SampleApp(tk.Tk):
-
-    def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
-        self.title("Password Manager")
-        self.geometry("500x500")
-        # the container is where we'll stack a bunch of frames
-        # on top of each other, then the one we want visible
-        # will be raised above the others
-        container = tk.Frame(self)
-        container.pack(side="top", fill="both", expand=True)
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
-
-        self.frames = {}
-        for F in (LoginPage, Manager):
-            page_name = F.__name__
-            frame = F(parent=container, controller=self)
-            self.frames[page_name] = frame
-
-            # put all of the pages in the same location;
-            # the one on the top of the stacking order
-            # will be the one that is visible.
-            frame.grid(row=0, column=0)
-
-        self.show_frame("LoginPage")
-
-    def show_frame(self, page_name):
-        frame = self.frames[page_name]
-        frame.tkraise()
+def manager():
+    label = Label(text="Password Manager:")
+    label.pack()
+               
+    g = Button(text="Generate a password")
+    g.pack()
+    s = Button(text="Store a password")
+    s.pack()
+    r = Button(text="Retrieve a password")
+    r.pack()       
 
 
-class LoginPage(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        label = tk.Label(self, text="This is the start page")
-        label.pack(side="top", fill="x", pady=10)
-
-        button1 = tk.Button(self, text="Go to Page One",
-                            command=lambda: controller.show_frame("Manager"))
-        button1.pack()
-        #button2.pack()
+def clearLogin(w):
+    for i in w:
+        i.pack_forget()
 
 
-class Manager(tk.Frame):
+widgets = []
 
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        label = tk.Label(self, text="This is page 1")
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("LoginPage"))
-        button.pack()
+master = Tk()
+master.title("Password Manager")
+master.geometry("250x250")
+
+
+label = Label(text="Password Manager")
+label.pack(side="top")
+widgets.append(label)
+uservar = StringVar()
+passvar = StringVar()
+    
+user = Label(text="Username:")
+user.pack()
+widgets.append(user)
+
+user_e = Entry(textvariable = uservar)
+user_e.pack()
+widgets.append(user_e)
+
+p = Label(text="Password:")
+p.pack()
+widgets.append(p)
+
+
+pass_e = Entry(textvariable = passvar, show="*")    
+pass_e.pack()
+widgets.append(pass_e)
+
+        
+def check():
+    if auth.authenticate(uservar.get(), passvar.get()):
+        clearLogin(widgets)
+        manager()
+    else:
+        label.config(text="Incorrect Password", fg='#f70000')
+        
+
+button1 = Button(text="Login", command= check)
+button1.pack()
+widgets.append(button1)
 
 
 if __name__ == "__main__":
-    app = SampleApp()
-    app.mainloop()
+    mainloop()
