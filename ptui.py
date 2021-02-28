@@ -1,5 +1,4 @@
 # Plain text UI for password manager
-# To run: python3 ptui.py
 import random
 import string
 import sqlite3
@@ -7,6 +6,13 @@ from entry import Entry # Class file
 
 
 def generator():
+    '''
+    Generates a random string
+        Parameters:
+            None
+        Returns:
+            None
+    '''
     builder = []
     password = ""
     print("Please enter a password length:")
@@ -35,6 +41,15 @@ def generator():
         menu()
 
 def store(website, usr, pswd):
+    '''
+    Stores information in the databse
+        Parameters:
+            website (str): Website name
+            usr (str): Username
+            pswd (str): Password
+        Returns:
+            None
+    '''
     e = Entry(website, usr, pswd)
     name = e.getUser()
     pas = e.getPass()
@@ -51,6 +66,13 @@ def store(website, usr, pswd):
 
 
 def retrieve():
+    '''
+    Retrieves passwords from the database
+        Parameters:
+            None
+        Returns:
+            None
+    '''
     print("Select Option:")
     print("1. Enter specific website for retrieval")
     print("2. Browse all saved passwords")
@@ -93,6 +115,9 @@ def retrieve():
         quit()
 
 def menu():
+    '''
+    Redundant menu function
+    '''
     print("What would you like to do?")
     print("1. Generate a password")
     print ("2. Store a password")
@@ -124,6 +149,13 @@ def menu():
         quit()
 
 def main():
+    '''
+    Main driver function
+        Parameters:
+            None
+        Retuns:
+            None
+    '''
     print("Welcome to my password manager!\nWhat would you like to do?")
     print("1. Generate a password")
     print ("2. Store a password")

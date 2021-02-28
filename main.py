@@ -2,18 +2,18 @@ from tkinter import *
 import auth
 import gui_helper
 
-def clearWindow(func, l):
+def clear(func, l):
     '''
     Clears the window of all widgets 
         Parameters:
-            func: The function that is to be called after the window is cleared
-            l: The list to clear
+            func (function call): The function that is to be called after the window is cleared
+            l (list): The list to clear
         Returns:
             None
         '''
-        for i in l:
-            i.pack_forget()
-        func
+    for i in l:
+        i.pack_forget()
+    func
 
 def generator():
     '''
@@ -25,27 +25,16 @@ def generator():
     '''
 
     g_wig = [] # Houses all the widgets
-    def clear(func):
-        '''
-        Clears the window of all widgets 
-            Parameters:
-                func: The function that is to be called after the window is cleared
-            Returns:
-                None
-        '''
-        for i in g_wig:
-            i.pack_forget()
-        func
-
+    
     def save(p):
         ''' 
         Takes a generated password and aquires more information and then saves it
             Parameters:
-                p: The password generated 
+                p (str): The password generated 
             Returns:
                 None
         '''
-        clear(None)
+        clear(None, g_wig)
         u = StringVar()
         w = StringVar()
         
@@ -76,7 +65,7 @@ def generator():
         g_wig.append(submit)
 
 
-        back = Button(text="Back", command=lambda:  clear(manager()))
+        back = Button(text="Back", command=lambda:  clear(manager(), g_wig))
         back.pack(side="bottom")
         g_wig.append(back)
 
@@ -85,12 +74,12 @@ def generator():
         Password generator function that calls the helper function in gui_helper.py
         Uses try-except block to check for non-integer values entered    
             Parameters:
-                length: The length of the password requested to be generated
+                length (str): The length of the password requested to be generated
             Returns:
                 None
         '''
         try: 
-            l = int(length)
+            l = int(length) # Cast length to integer
             pswd = gui_helper.generator(l)
             g = Label(text="Your password is: " + pswd, pady=15)
             g.pack()
@@ -125,7 +114,7 @@ def generator():
     b.pack()
     g_wig.append(b)
 
-    e = Button(text="Go back", command=lambda: clear(manager()))
+    e = Button(text="Go back", command=lambda: clear(manager(), g_wig))
     e.pack(side="bottom")
     g_wig.append(e)
 
@@ -138,11 +127,7 @@ def store():
             None
     '''
 
-    s_wig = []
-    def clear(func):
-        for i in s_wig:
-            i.pack_forget()
-        func
+    s_wig = [] # Houses widgets
     
     u = StringVar()
     ps = StringVar()
@@ -174,17 +159,24 @@ def store():
     web_e.pack()
     s_wig.append(web_e)
     
-    back = Button(text="Back", command=lambda: clear(manager()))
+    back = Button(text="Back", command=lambda: clear(manager(), s_wig))
     back.pack()
     s_wig.append(back)
 
     def submit():
+        '''
+        Calls the helper function in gui_helper to store the password in the database
+            Parameter:
+                None
+            Returns:
+                None
+        '''
         gui_helper.store(w.get(),u.get(),ps.get())
-        clear(None)
+        clear(None, s_wig)
         success = Label (text="Password was saved")
         success.pack()
         s_wig.append(success)
-        back = Button(text="Back", command=lambda: clear(manager()))
+        back = Button(text="Back", command=lambda: clear(manager(), s_wig))
         back.pack()
         s_wig.append(back)
 
@@ -195,13 +187,23 @@ def store():
 
 
 def retrieve():
-    r_wig = []
-    def clear(func):
-        for i in r_wig:
-            i.pack_forget()
-        func
+    '''
+    Parent function to retrieve passwords
+        Parameters:
+            None
+        Returns:
+            None
+    '''
+    r_wig = [] # Houses widgets
 
     def get(name):
+        '''
+        Gets and displays the password from the database
+            Parameters:
+                name (str): The website name that the username and password is associated with
+            Returns:
+                None
+        '''
         val = gui_helper.retrieve_specific(name)
         u = Label(text="Username: " + val[1])
         u.pack()
@@ -211,12 +213,19 @@ def retrieve():
         p.pack()
         r_wig.append(p)
         
-        back = Button(text="Back", command=lambda: clear(manager()))
+        back = Button(text="Back", command=lambda: clear(manager(), r_wig))
         back.pack(side="bottom")
         r_wig.append(back)
 
     def specific():
-        clear(None)
+        '''
+        Gets the website name from input
+            Paramters:
+                None
+            Returns:
+                None
+        '''
+        clear(None, r_wig)
         w = Label(text="Website:")
         w.pack()
         r_wig.append(w)
@@ -231,7 +240,7 @@ def retrieve():
         sub.pack()
         r_wig.append(sub)
 
-        back = Button(text="Back", command=lambda: clear(manager()))
+        back = Button(text="Back", command=lambda: clear(manager(), r_wig))
         back.pack()
         r_wig.append(back)
 
@@ -242,7 +251,14 @@ def retrieve():
     r_wig.append(specific)
 
     def general():
-        clear(None)
+        '''
+        Gets all the passwords stored in the database and displays them in a drop down menu
+            Parameters:
+                None
+            Returns:
+                None
+        '''
+        clear(None, r_wig)
         r = gui_helper.retrieve_all()
         var = StringVar()
         var.set(r[0])
@@ -259,28 +275,32 @@ def retrieve():
     r_wig.append(a)
 
 
-    back = Button(text="Back", command=lambda: clear(manager()))
+    back = Button(text="Back", command=lambda: clear(manager(), r_wig))
     back.pack(side="bottom")
     r_wig.append(back)
 
 def manager():
-    m_widgets = []
-    def clear(func):
-        for i in m_widgets:
-            i.pack_forget()
-        func
+    '''
+    Main menu that displays the different options
+        Parameters:
+            None
+        Returns:
+            None
+    '''
+    
+    m_widgets = [] # Houses the widgets
 
     label = Label(text="Password Manager:")
     label.pack()
     m_widgets.append(label)
                
-    g = Button(text="Generate a password", command=lambda: clear(generator()))
+    g = Button(text="Generate a password", command=lambda: clear(generator(), m_widgets))
     g.pack()
     m_widgets.append(g)
-    s = Button(text="Store a password", command=lambda: clear(store()))
+    s = Button(text="Store a password", command=lambda: clear(store(), m_widgets))
     s.pack()
     m_widgets.append(s)
-    r = Button(text="Retrieve a password", command=lambda: clear(retrieve()))
+    r = Button(text="Retrieve a password", command=lambda: clear(retrieve(), m_widgets))
     r.pack()       
     m_widgets.append(r)
 
@@ -288,13 +308,11 @@ def manager():
     exit.pack(side="bottom")
     m_widgets.append(exit)
 
+'''
+Presented Upon Launch
+'''
 
-def clearLogin(w):
-    for i in w:
-        i.pack_forget()
-
-
-widgets = []
+widgets = [] #For login
 
 master = Tk()
 master.title("Password Manager")
@@ -326,8 +344,15 @@ widgets.append(pass_e)
 
         
 def check():
+    '''
+    Verifies if the information inputted is the correct login, no sanitization yet
+        Paramters:
+            None
+        Returns:
+            None
+    '''
     if auth.authenticate(uservar.get(), passvar.get()):
-        clearLogin(widgets)
+        clear(None, widgets)
         manager()
     else:
         label.config(text="Incorrect Password", fg='#f70000')

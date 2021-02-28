@@ -6,11 +6,18 @@ from entry import Entry # Class file
 
 
 def generator(length):
+    '''
+    Password Generator
+        Parameters:
+            length (int): the length of the password to be generated
+        Returns
+            final (str): the generated password
+    '''
     builder = []
     password = ""
     for i in range(length):
-        char = random.choice(string.printable)
-        if (char == " " or char == "\n" or char == "\t"):
+        char = random.choice(string.printable)              # Picks a random character from all printable chars in python
+        if (char == " " or char == "\n" or char == "\t"):   # Filters out spaces, newlines, and tabs
             None
         else:
             builder.append(char)
@@ -20,16 +27,31 @@ def generator(length):
 
 
 def store(website, usr, pswd):
-    #Database
-    connection = sqlite3.connect("data.db")
+    '''
+    Stores information in a sql database
+        Parameters:
+            website (str): the website name
+            usr (str): username
+            pswd (str): password
+        Returns:
+            None
+    '''
+    connection = sqlite3.connect("data.db")     # Local database file name
     c = connection.cursor()
-    #c.execute('''CREATE TABLE entry (website text, username text, password text)''')
+    #c.execute('''CREATE TABLE entry (website text, username text, password text)''')   #Needs to be uncommented if file does not exist
     c.execute("INSERT INTO entry VALUES (?,?,?)", (website, usr, pswd))
-    connection.commit()
+    connection.commit() # Saves entry
     connection.close()
 
 
 def retrieve_specific(name):
+    '''
+    Retrieves specific website name
+        Parameters:
+            name (str): Website name
+        Returns:
+            value (list): List containing the website name, username, and password
+    '''
     connection = sqlite3.connect("data.db")
     c = connection.cursor()
     c.execute('SELECT * FROM entry WHERE website=?', (name,))
@@ -38,6 +60,13 @@ def retrieve_specific(name):
     return value
 
 def retrieve_all():
+    '''
+    Retrieves all websites stored in the database
+        Parameters:
+            None
+        Retuns:
+            result (list): all the websites in the database
+    '''
     connection = sqlite3.connect("data.db")
     c = connection.cursor()
     c.execute('SELECT website FROM entry')
