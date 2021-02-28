@@ -2,14 +2,49 @@ from tkinter import *
 import auth
 import gui_helper
 
+def clearWindow(func, l):
+    '''
+    Clears the window of all widgets 
+        Parameters:
+            func: The function that is to be called after the window is cleared
+            l: The list to clear
+        Returns:
+            None
+        '''
+        for i in l:
+            i.pack_forget()
+        func
+
 def generator():
-    g_wig = []
+    '''
+    Parent Function that generates passwords and saves them
+        Parameters:
+            None
+        Returns:
+            None
+    '''
+
+    g_wig = [] # Houses all the widgets
     def clear(func):
+        '''
+        Clears the window of all widgets 
+            Parameters:
+                func: The function that is to be called after the window is cleared
+            Returns:
+                None
+        '''
         for i in g_wig:
             i.pack_forget()
         func
 
     def save(p):
+        ''' 
+        Takes a generated password and aquires more information and then saves it
+            Parameters:
+                p: The password generated 
+            Returns:
+                None
+        '''
         clear(None)
         u = StringVar()
         w = StringVar()
@@ -46,6 +81,14 @@ def generator():
         g_wig.append(back)
 
     def gen(length):
+        '''
+        Password generator function that calls the helper function in gui_helper.py
+        Uses try-except block to check for non-integer values entered    
+            Parameters:
+                length: The length of the password requested to be generated
+            Returns:
+                None
+        '''
         try: 
             l = int(length)
             pswd = gui_helper.generator(l)
@@ -87,6 +130,14 @@ def generator():
     g_wig.append(e)
 
 def store():
+    '''
+    Parent function for storing in a databse
+        Parameters:
+            None
+        Returns:
+            None
+    '''
+
     s_wig = []
     def clear(func):
         for i in s_wig:
@@ -122,6 +173,10 @@ def store():
     web_e = Entry(textvariable = w)    
     web_e.pack()
     s_wig.append(web_e)
+    
+    back = Button(text="Back", command=lambda: clear(manager()))
+    back.pack()
+    s_wig.append(back)
 
     def submit():
         gui_helper.store(w.get(),u.get(),ps.get())
@@ -176,14 +231,30 @@ def retrieve():
         sub.pack()
         r_wig.append(sub)
 
+        back = Button(text="Back", command=lambda: clear(manager()))
+        back.pack()
+        r_wig.append(back)
+
 
 
     specific = Button(text="Enter specific website for retrieval", command=specific)
     specific.pack()
     r_wig.append(specific)
 
+    def general():
+        clear(None)
+        r = gui_helper.retrieve_all()
+        var = StringVar()
+        var.set(r[0])
+        w = OptionMenu(master, var, *r)
+        w.pack()
+        r_wig.append(w)
 
-    a = Button(text="Browse all saved passwords")
+        b = Button(text="Submit", command= lambda: get(var.get()[2:len(var.get())-3])) #Disgusting way of getting the name
+        b.pack()
+        r_wig.append(b)
+           
+    a = Button(text="Browse all saved passwords", command=general)
     a.pack()
     r_wig.append(a)
 

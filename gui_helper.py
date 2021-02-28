@@ -38,14 +38,11 @@ def retrieve_specific(name):
     return value
 
 def retrieve_all():
-    if (q == '2'):
-        connection = sqlite3.connect("data.db")
-        c = connection.cursor()
-        c.execute('SELECT website FROM entry')
-        result = c.fetchall()
-        print("Saved Websites:")
-        for i in result:
-            print(i[0], end =" ")
-        print("\n")
+    connection = sqlite3.connect("data.db")
+    c = connection.cursor()
+    c.execute('SELECT website FROM entry')
+    result = c.fetchall()
+    connection.close()
+    return result
 
     
