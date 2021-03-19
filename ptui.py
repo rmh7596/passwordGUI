@@ -1,9 +1,11 @@
 # Plain text UI for password manager
 import random
+import rsa
 import string
 import sqlite3
 from entry import Entry # Class file
 
+publicKey, privateKey = rsa.newkeys(512)
 
 def generator():
     '''
@@ -40,6 +42,14 @@ def generator():
     if (n == 'N'):
         menu()
 
+#privateKey = rsa.newkeys(512)
+
+def encrypt(password):
+    #publicKey, privateKey = rsa.newkeys(512)
+    secure_pass =  rsa.encrypt(password.encode(), publicKey)
+    return secure_pass;
+    # decrypt d = rsa.decrypt(e, privateKey).decode()
+    
 def store(website, usr, pswd):
     '''
     Stores information in the databse
@@ -55,14 +65,23 @@ def store(website, usr, pswd):
     pas = e.getPass()
     web = e.getWeb()
 
+    s_pass = encrypt(pas)
+    print("Before: ", pas)
+    print("After: ", s_pass)
+
+    '''
     #Database
     connection = sqlite3.connect("data.db")
     c = connection.cursor()
-    #c.execute('''CREATE TABLE entry (website text, username text, password text)''')
     c.execute("INSERT INTO entry VALUES (?,?,?)", (web, name, pas))
     connection.commit()
     connection.close()
     menu()
+    '''
+    
+    # Used once to create the table in the database
+    #c.execute('''CREATE TABLE entry (website text, username text, password text)''')
+
 
 
 def retrieve():
