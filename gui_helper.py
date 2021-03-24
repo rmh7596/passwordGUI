@@ -1,9 +1,10 @@
 # Simplified functions for use in the GUI
 import random
 import string
+import rsa
+import secure
 import sqlite3
 from entry import Entry # Class file
-
 
 def generator(length):
     '''
@@ -25,7 +26,6 @@ def generator(length):
     final = password.join(builder)
     return final
 
-
 def store(website, usr, pswd):
     '''
     Stores information in a sql database
@@ -36,10 +36,12 @@ def store(website, usr, pswd):
         Returns:
             None
     '''
+    s_pas = secure.encrypt(pswd)
+
     connection = sqlite3.connect("data.db")     # Local database file name
     c = connection.cursor()
     #c.execute('''CREATE TABLE entry (website text, username text, password text)''')   #Needs to be uncommented if file does not exist
-    c.execute("INSERT INTO entry VALUES (?,?,?)", (website, usr, pswd))
+    c.execute("INSERT INTO entry VALUES (?,?,?)", (website, usr, s_pas))
     connection.commit() # Saves entry
     connection.close()
 
@@ -57,7 +59,9 @@ def retrieve_specific(name):
     c.execute('SELECT * FROM entry WHERE website=?', (name,))
     value = c.fetchone()
     connection.close()
-    return value
+    d_value = (value[0], value[1], value[2])
+    print(d_value)
+    return d_value
 
 def retrieve_all():
     '''

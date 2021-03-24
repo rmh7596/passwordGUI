@@ -42,10 +42,8 @@ def generator():
     if (n == 'N'):
         menu()
 
-#privateKey = rsa.newkeys(512)
 
 def encrypt(password):
-    #publicKey, privateKey = rsa.newkeys(512)
     secure_pass =  rsa.encrypt(password.encode(), publicKey)
     return secure_pass;
     # decrypt d = rsa.decrypt(e, privateKey).decode()
