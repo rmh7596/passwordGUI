@@ -1,12 +1,12 @@
 import rsa
 publicKey, privateKey = rsa.newkeys(512)
 
-def encrypt(password):
-    secure_pass =  rsa.encrypt(password.encode(), publicKey)
+def encrypt(password, key):
+    secure_pass =  rsa.encrypt(password.encode(), key)
     return secure_pass;
 
-def decrypt(p):
-    d = rsa.decrypt(p, privateKey).decode()
+def decrypt(p, key):
+    d = rsa.decrypt(p, key).decode()
     return d
 
 def main():
