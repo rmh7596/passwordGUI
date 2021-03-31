@@ -36,7 +36,7 @@ def store(website, usr, pswd):
         Returns:
             None
     '''
-    s_pas = secure.encrypt(pswd, secure.publicKey)
+    s_pas = secure.encrypt(pswd.encode())
     connection = sqlite3.connect("data.db")     # Local database file name
     c = connection.cursor()
     #c.execute('''CREATE TABLE entry (website text, username text, password text)''')   #Needs to be uncommented if file does not exist
@@ -58,8 +58,7 @@ def retrieve_specific(name):
     c.execute('SELECT * FROM entry WHERE website=?', (name,))
     value = c.fetchone()
     connection.close()
-    d_pas = secure.decrypt(value[2], secure.privateKey)
-    d_value = (value[0], value[1], d_pas)
+    d_value = (value[0], value[1], secure.decrypt(value[2]))
     return d_value
 
 def retrieve_all():
