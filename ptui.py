@@ -1,6 +1,7 @@
 # Plain text UI for password manager
 import random
 import rsa
+import secure
 import string
 import sqlite3
 from entry import Entry # Class file
@@ -44,9 +45,8 @@ def generator():
 
 
 def encrypt(password):
-    secure_pass =  rsa.encrypt(password.encode(), publicKey)
-    return secure_pass;
-    # decrypt d = rsa.decrypt(e, privateKey).decode()
+    s_pas = secure.encrypt(password.encode())
+    return s_pass;
     
 def store(website, usr, pswd):
     '''
@@ -64,18 +64,14 @@ def store(website, usr, pswd):
     web = e.getWeb()
 
     s_pass = encrypt(pas)
-    print("Before: ", pas)
-    print("After: ", s_pass)
 
-    '''
     #Database
     connection = sqlite3.connect("data.db")
     c = connection.cursor()
-    c.execute("INSERT INTO entry VALUES (?,?,?)", (web, name, pas))
+    c.execute("INSERT INTO entry VALUES (?,?,?)", (web, name, s_pass))
     connection.commit()
     connection.close()
     menu()
-    '''
     
     # Used once to create the table in the database
     #c.execute('''CREATE TABLE entry (website text, username text, password text)''')
@@ -111,7 +107,7 @@ def retrieve():
         c.execute('SELECT * FROM entry WHERE website=?', (w,))
         value = c.fetchone()
         print("Username: " + value[1])
-        print("Password: " + value[2])
+        print("Password: " + secure.decrypt(value[2]))
         connection.close()
         menu()
 

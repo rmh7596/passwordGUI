@@ -39,7 +39,10 @@ def store(website, usr, pswd):
     s_pas = secure.encrypt(pswd.encode())
     connection = sqlite3.connect("data.db")     # Local database file name
     c = connection.cursor()
-    #c.execute('''CREATE TABLE entry (website text, username text, password text)''')   #Needs to be uncommented if file does not exist
+    
+    #Needs to be uncommented if database does not have a table
+    #c.execute('''CREATE TABLE entry (website text, username text, password text)''')   
+    
     c.execute("INSERT INTO entry VALUES (?,?,?)", (website, usr, s_pas))
     connection.commit() # Saves entry
     connection.close()

@@ -114,7 +114,7 @@ def generator():
     b.pack()
     g_wig.append(b)
 
-    e = Button(text="Go back", command=lambda: clear(manager(), g_wig))
+    e = Button(text="Back", command=lambda: clear(manager(), g_wig))
     e.pack(side="bottom")
     g_wig.append(e)
 
@@ -212,10 +212,6 @@ def retrieve():
         p = Label(text="Password: " + val[2])
         p.pack()
         r_wig.append(p)
-        
-        back = Button(text="Back", command=lambda: clear(manager(), r_wig))
-        back.pack(side="bottom")
-        r_wig.append(back)
 
     def specific():
         '''
@@ -316,7 +312,7 @@ widgets = [] #For login
 
 master = Tk()
 master.title("Password Manager")
-master.geometry("250x250")
+master.geometry("500x500")
 
 
 label = Label(text="Password Manager")
