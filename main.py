@@ -312,7 +312,7 @@ widgets = [] #For login
 
 master = Tk()
 master.title("Password Manager")
-master.geometry("500x500")
+master.geometry("300x300")
 
 
 label = Label(text="Password Manager")

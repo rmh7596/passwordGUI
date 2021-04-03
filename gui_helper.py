@@ -40,8 +40,10 @@ def store(website, usr, pswd):
     connection = sqlite3.connect("data.db")     # Local database file name
     c = connection.cursor()
     
-    #Needs to be uncommented if database does not have a table
-    #c.execute('''CREATE TABLE entry (website text, username text, password text)''')   
+    try:
+        c.execute('SELECT * FROM entry')
+    except sqlite3.OperationalError:
+        c.execute('''CREATE TABLE entry (website text, username text, password text)''')   
     
     c.execute("INSERT INTO entry VALUES (?,?,?)", (website, usr, s_pas))
     connection.commit() # Saves entry
