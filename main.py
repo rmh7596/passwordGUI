@@ -195,7 +195,7 @@ def retrieve():
             None
     '''
     r_wig = [] # Houses widgets
-
+    u_p_wig = []
     def get(name):
         '''
         Gets and displays the password from the database
@@ -204,14 +204,17 @@ def retrieve():
             Returns:
                 None
         '''
+        clear(None, u_p_wig)
         val = gui_helper.retrieve_specific(name)
         u = Label(text="Username: " + val[1])
         u.pack()
         r_wig.append(u)
+        u_p_wig.append(u)
 
         p = Label(text="Password: " + val[2])
         p.pack()
         r_wig.append(p)
+        u_p_wig.append(p)
 
     def specific():
         '''
