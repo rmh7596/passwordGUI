@@ -265,6 +265,10 @@ def retrieve():
         b = Button(text="Submit", command= lambda: get(var.get()[2:len(var.get())-3])) #Disgusting way of getting the name
         b.pack()
         r_wig.append(b)
+
+        back = Button(text="Back", command=lambda: clear(manager(), r_wig))
+        back.pack(side="bottom")
+        r_wig.append(back)
            
     a = Button(text="Browse all saved passwords", command=general)
     a.pack()
